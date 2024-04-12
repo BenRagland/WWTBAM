@@ -5,16 +5,16 @@ can input their name, play the game, use lifelines to answer questions and view 
 
 ## Database Relationships
 
-![](assets/Database Relationships.png)
+<img src= "assets/Database Relationships.png">
 
 ## Decision Tree
 
-![](assets/Decision Tree.png)
+<img src="assets/Decision Tree.png" >
 
 ## Data Sample
 
-![](assets/Data Sample.png)
+<img src="assets/Data Sample.png">
 
 ## Kanban Board
 
-![](assets/Kanban Board.png)
+<img src="assets/Kanban Board.png">
