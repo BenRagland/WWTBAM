@@ -2,7 +2,11 @@
 
 from helpers import (
     exit_program,
-    helper_1
+    list_users,
+    find_user_by_name,
+    update_user
+    
+    
 )
 
 
