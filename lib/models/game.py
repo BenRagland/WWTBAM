@@ -51,7 +51,7 @@ class Game:
         CURSOR.execute(sql, (self.cur_score, self.final_score, self.date, self.user_id))
         CONN.commit()
         self.id = CURSOR.lastrowid
-  
+
     @classmethod
     def create(cls, cur_score, final_score, date, user_id):
         game = cls(cur_score, final_score, date, user_id)
