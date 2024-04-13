@@ -4,14 +4,15 @@ import datetime
 CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
 
-POINTS = ['$100', ]
+POINTS = ['$100', '$200', "$300", "$500", "$1,000", "$2,000", "$4,000", "$8,000", "$16,000", "$25,000",
+          "$50,000", "$100,000", "$250,000", "$500,000", "$1,000,000"]
 class Game:
 
-    def __init__(self, cur_score='$0', final_score='$0', date=datetime.datetime.now().date().strftime("%m/%d/%y"), id=None, user_id=None):
+    def __init__(self, cur_score='$0', final_score='$0', 
+                 date=datetime.datetime.now().date().strftime("%m/%d/%y"), id=None, user_id=None):
         self.cur_score = cur_score
         self.final_score = final_score
         self.date = date
-
         self.id = id
         self.user_id = user_id
         self.save()
@@ -77,9 +78,6 @@ class Game:
         else:
             return None 
 
-    def update_score(self, index):
-        self.cur_score = POINTS[index]
-
     def update(self):
         sql = """ 
             UPDATE games SET cur_score = ?, final_score = ?, date = ?, user_id = ? WHERE id = ?;
@@ -87,6 +85,9 @@ class Game:
         CURSOR.execute(sql, (self.cur_score, self.final_score, self.date, self.user_id, self.id))
         CONN.commit()
 
+    def update_score(self, index):
+        self.cur_score = POINTS[index]
+        self.update()
 
     def __repl__(self):
         return f'<Game ID: {self.id}, High Score: {self.final_score}, Date: {self.date}'

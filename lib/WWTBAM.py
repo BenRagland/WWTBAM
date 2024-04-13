@@ -19,7 +19,7 @@ def get_user_input(valid_input):
                   Enter 1, 2, or 3 to use a lifeline \nOR \n 
                   Enter 8 to Walk Away""")
             
-def game_over():
+def game_over(game):
     print(f'You walked away with {game.final_score}')
     print(f"Thanks for playing {cur_user.name}")
     
@@ -71,15 +71,15 @@ def play():
                 print(f'\n You decided to walk away with {game.cur_score}.')
                 game.cur_score = game.final_score
                 game.update()
-                game_over()
+                game_over(game)
         else:
             # If the answer is incorrect, print "Incorrect!"
             print("\nIncorrect!")
-            game_over()
+            game_over(game)
 
         # Print player's current score
         print(f'Your total is now: {game.cur_score}')
 
     # Print the final score after all questions have been answered
     print(f"CONGRATULATIONS, {cur_user.name}!! You're a millionaire!")
-    game_over()
+    game_over(game)
