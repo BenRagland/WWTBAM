@@ -6,16 +6,25 @@ class Question:
     #dictionary of objects saved to the database
     all = {}
     
-    def __init__(self, question, answer1, answer2, answer3, answer4, correct_answer, difficulty, id=None):
-        self.id= id
+    def __init__(self, question, answers = [], correct_answer, difficulty, id=None):
         self.question = question # is this right??? bc question is self
-        self.answer1 = answer1
-        self.answer2 = answer2
-        self.answer3 = answer3
-        self.answer4 = answer4
+        self.answers = answers
         self.correct_answer = correct_answer
         self.difficulty = difficulty
+        self.id= id
         
+    @property
+    def answers(self):
+        return self._answers
+    
+    @answers.setter
+    def answers(self):
+        if isinstance (answers, list) and len(answers) == 4:
+            return self._answers
+        else:
+            Exception("Answers should be a list of 4 answers")
+        
+            
     @classmethod
     def create_table(cls):
         """create a new table to persist the attributes of the question instances"""
