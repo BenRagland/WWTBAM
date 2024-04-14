@@ -1,5 +1,8 @@
 #lib/models/question.py
 import sqlite3
+from seed.question_seed import questions_easy
+
+
 CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
 
@@ -7,12 +10,13 @@ class Question:
     
     #list of objects saved to the database
     all = []
+    DEFAULT_QUESTIONS = questions_easy
     
-    def __init__(self, question="", answers = [], correct_answer="", difficulty="", id=None):
+    def __init__(self, question="", answers = [], correct_answer="", difficulty={}, id=None):
         self.question = question 
         self.answers = answers
         self.correct_answer = correct_answer
-        self.difficulty = difficulty
+        self.difficulty = difficulty.difficulty
         self.id = id
         type(self).all.append(self)
         
@@ -37,12 +41,46 @@ class Question:
                 question TEXT,
                 answers BLOB,
                 correct_answer TEXT,
-                diifficulty TEXT)
+                difficulty TEXT);
                 """
         CURSOR.execute(sql)
         CONN.commit()
-        
-    #drop table classmethod? #BUILD THIS TODAY SATURDAY
+
+    def save(self):
+        try:
+            sql="""
+                    INSERT INTO question VALUES (?,?,?,?);
+                """
+            sql_return = CURSOR.execute(sql,(self.question, self.answers,self.correct_answer, self.difficulty)).fetchone()
+            self.id = sql_return.lastrowid
+            CONN.commit()
+        except Exception as err:
+            print(f'Save went wrong,{err}')
+
+    @classmethod
+    def create_row(cls,question,answer,correct_answer,difficulty):
+        newQuestion = cls(question,answer,correct_answer,difficulty)
+        newQuestion.save()
+        return newQuestion
+    
+    @classmethod
+    def del_row(cls,id):
+        try:
+            sql = """
+                    DELETE FROM questions WHERE id = ?;
+                """
+            CURSOR.execute(sql,(id,))
+            CONN.commit()
+            print(f"Success!! Deleted row of  id:{id}")
+        except Exception as err:
+            print(f"Error Deleting {id} error:{err}")
+    
+
+    @classmethod
+    def drop_table(cls):
+        sql=""" DROP TABLE IF EXISTS questions; """
+        CURSOR.execute(sql)
+        CONN.commit()
     
     
     # def display_question(self):

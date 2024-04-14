@@ -1,5 +1,4 @@
 import sqlite3
-import datetime
 
 CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
@@ -22,7 +21,6 @@ class Users:
         else:
             self._name = name.upper()
 
-    
     def __repr__(self):
         return(f'<id:{self.id} Owner:"{self.name}" hs:{self.high_score} />')
     
@@ -33,12 +31,11 @@ class Users:
                 id INTEGER PRIMARY KEY,
                 name TEXT,
                 high_score INTEGER
-            )
+            );
             """
         CURSOR.execute(sql)
         CONN.commit()
     
-   
     def save(self):
         try:
             sql= """
@@ -60,8 +57,6 @@ class Users:
    #deletes row with and id
     @classmethod
     def delete_row(cls,id):
-        #if id is an int, convert it to string
-        # str(id) if isinstance(id,int) else ""
         try:
             sql = """ 
                 DELETE FROM users WHERE id = ?;
@@ -76,13 +71,14 @@ class Users:
     def update(self):
         try:
             sql="""
-                    UPDATE users SET name = ?, high_score = ?, where id = ?
+                    UPDATE users SET name = ?, high_score = ?, where id = ? ;
                 """
             CURSOR.execute(sql,(self.name, self.high_score,self.id))
             CONN.commit()
             print(f"successfully saved ${self.name}")
         except Exception as err:
             print (f"Error Updating ${self.name}: ${err}" )
+
 
     #Create Instance from row where row is a sequence
     @classmethod
