@@ -14,6 +14,7 @@ class Users:
     def name(self):
         return self._name
     
+    #validate name 
     @name.setter
     def name(self,name):
         if not (isinstance(name,str)):
@@ -22,7 +23,6 @@ class Users:
             self._name = name.upper()
 
     
-    #validate name Method
     def __repr__(self):
         return(f'<{self.id} Owner "{self.name}" {self.high_score} />')
     
