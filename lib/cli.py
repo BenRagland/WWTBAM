@@ -1,6 +1,6 @@
 # lib/cli.py
 
-from helpers import (
+from lib.helpers.helpers import (
     exit_program,
     list_users,
     find_user_by_name,
