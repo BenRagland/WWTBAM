@@ -24,14 +24,14 @@ class Users:
 
     
     def __repr__(self):
-        return(f'<{self.id} Owner "{self.name}" {self.high_score} />')
+        return(f'<id:{self.id} Owner:"{self.name}" hs:{self.high_score} />')
     
     @classmethod
     def create_table(cls):
         sql="""
             CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY
-                name TEXT
+                id INTEGER PRIMARY KEY,
+                name TEXT,
                 high_score INTEGER
             )
             """
@@ -42,14 +42,14 @@ class Users:
     def save(self):
         try:
             sql= """
-                INSERT INTO Users (name) VALUES (?);
+                INSERT INTO Users (name,high_score) VALUES (?,?);
                 """
-            CURSOR.execute(sql,(self.name))
+            CURSOR.execute(sql,(self.name,self.high_score))
             # set ID
             self.id = CURSOR.lastrowid
             CONN.commit()
         except Exception as err:
-            Exception (f'Save went wrong,${err}')
+            print(f'Save went wrong,{err}')
 
     @classmethod
     def create_row(cls,name):
@@ -57,27 +57,21 @@ class Users:
         user.save()
         return user
     
+   #deletes row with and id
     @classmethod
     def delete_row(cls,id):
+        #if id is an int, convert it to string
+        # str(id) if isinstance(id,int) else ""
         try:
             sql = """ 
                 DELETE FROM users WHERE id = ?;
             """
-            CONN.execute(sql, (id))
+            CONN.execute(sql, (id,))
             CONN.commit()
             print("success")
         except Exception as err:
             print(f'error:{err}')
 
-    #Create Instance from Row
-    @classmethod
-    def create_instance(cls,row):
-        user = cls(
-            id = row[0],
-            name = row [1],
-            high_score = row[2]
-        )
-        return user
     
     def update(self):
         try:
@@ -90,13 +84,22 @@ class Users:
         except Exception as err:
             print (f"Error Updating ${self.name}: ${err}" )
 
+    #Create Instance from row where row is a sequence
+    @classmethod
+    def create_instance(cls,row):
+        user = cls(
+            id = row[0],
+            name = row [1],
+            high_score = row[2]
+        )
+        return user
 
     @classmethod 
     def find_by_id(cls, id):
         sql = """
                 SELECT * FROM users WHERE id=?;
             """
-        row = CURSOR.execute(sql,(id)).fetchone()
+        row = CURSOR.execute(sql,(id,)).fetchone()
         if not row: 
             return None 
         else: 
