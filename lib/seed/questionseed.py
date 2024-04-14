@@ -1,5 +1,7 @@
 from models.question import *
 
+Question.create_table()
+
 question1 = Question(question = "What is the largest planet in our solar system?", answers = ["Jupiter", "Saturn", "Mars", "Venus"], correct_answer= "Jupiter", difficulty="Easy")
 question2 = Question(question = "What is the chemical symbol for gold?", answers = ["Au", "Ag", "Cu", "Fe"], correct_answer= "Au", difficulty="Easy")
 question3 = Question(question = "Who painted the Mona Lisa?", answers = ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"], correct_answer= "Leonardo da Vinci", difficulty="Easy")

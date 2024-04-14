@@ -4,8 +4,8 @@ import datetime
 CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
 
-POINTS = ['$100', '$200', "$300", "$500", "$1,000", "$2,000", "$4,000", "$8,000", "$16,000", "$25,000",
-          "$50,000", "$100,000", "$250,000", "$500,000", "$1,000,000"]
+POINTS = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 25000,
+          50000, 100000, 250000, 500000, 1000000]
 class Game:
 
     def __init__(self, cur_score='$0', final_score='$0', 
@@ -23,8 +23,8 @@ class Game:
             CREATE TABLE IF NOT EXISTS games
                 (
                     id INTEGER PRIMARY KEY,
-                    cur_score TEXT,
-                    final_score TEXT,
+                    cur_score INTEGER,
+                    final_score INTEGER,
                     date TEXT,
                     user_id INTEGER,
                     FOREIGN KEY (user_id) REFERENCES users(id)
