@@ -111,7 +111,8 @@ def play():
 
         elif answer == '3'and not fifty_fifty_used:
             fifty_fifty_used = True
-            
+            ANSWER_OPTIONS.remove('3')
+
             # Create a list of incorrect answers
             incorrect_answers = [option for option in options if option != question.correct_answer]
             
