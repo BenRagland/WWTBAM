@@ -34,7 +34,7 @@ def game_over(game, cur_user):
         choice = input("Would you like to restart the game (r), return to the main menu (m), or quit (q)?: "
                     ).lower()
         if choice == 'r':
-            return play() #restart
+            return play(cur_user) #restart
         elif choice == 'q':
             return exit() #quit
         elif choice == 'm':
@@ -45,6 +45,9 @@ def game_over(game, cur_user):
 
 # Main method to run game
 def play(cur_user):
+ 
+    game = Game.create(user_id = cur_user.id)
+
 
     ask_the_audience_used = False
     phone_a_friend_used = False
@@ -67,8 +70,7 @@ def play(cur_user):
 
     game_questions = easy_questions[:5] + medium_questions[:5] + hard_questions[:5]
     random.shuffle(game_questions)
-
-    game = Game.create(user_id=cur_user.id) #TODO global cur_user? how to get id - find or create method
+ 
     print(f"\nWelcome to WWTBAM, {cur_user.name}!") #TODO make this better
 
     # Loop through 15 questions list
