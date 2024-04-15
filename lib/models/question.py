@@ -1,6 +1,7 @@
 #lib/models/question.py
 import sqlite3
-from seed.question_seed import questions_easy
+import pickle
+# from seed.question_seed import questions_easy
 
 
 CONN = sqlite3.connect('database.db')
@@ -10,16 +11,17 @@ class Question:
     
     #list of objects saved to the database
     all = []
-    DEFAULT_QUESTIONS = questions_easy
+    # DEFAULT_QUESTIONS = questions_easy
     
     def __init__(self, question="", answers = [], correct_answer="", difficulty={}, id=None):
         self.question = question 
         self.answers = answers
         self.correct_answer = correct_answer
-        self.difficulty = difficulty.difficulty
+        self.difficulty = difficulty['difficulty']
         self.id = id
-        self.save()
         type(self).all.append(self)
+        self.save()
+
         
     @property
     def answers(self):
@@ -40,7 +42,7 @@ class Question:
             CREATE TABLE IF NOT EXISTS questions (
                 id INTEGER PRIMARY KEY,
                 question TEXT,
-                answers BLOB,
+                answers TEXT,
                 correct_answer TEXT,
                 difficulty TEXT);
                 """
@@ -48,12 +50,15 @@ class Question:
         CONN.commit()
 
     def save(self):
+        db_answers = pickle.dumps(self.answers)
+        db_difficulty = pickle.dumps(self.difficulty)
+
         try:
             sql="""
-                    INSERT INTO question VALUES (?,?,?,?);
+                    INSERT INTO questions (question, answers, correct_answer, difficulty) VALUES (?,?,?,?);
                 """
-            sql_return = CURSOR.execute(sql,(self.question, self.answers,self.correct_answer, self.difficulty)).fetchone()
-            self.id = sql_return.lastrowid
+            CURSOR.execute(sql,(self.question, db_answers,self.correct_answer, db_difficulty)).fetchone()
+            self.id = CURSOR.lastrowid
             CONN.commit()
         except Exception as err:
             print(f'Save went wrong,{err}')

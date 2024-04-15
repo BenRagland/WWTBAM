@@ -4,7 +4,7 @@ CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
 
 class Users:
-    def __init__(self,name,high_score = 0,id="none"):
+    def __init__(self,name,high_score = 0,id=None):
         self.id = id
         self.name = name
         self.high_score = high_score
@@ -106,3 +106,21 @@ class Users:
         sql = """DROP TABLE IF EXISTS users;"""
         CURSOR.execute(sql)
         CONN.commit()
+
+    @classmethod 
+    def find_or_create_by(cls, name=None, high_score=0):
+        select_sql = """ 
+            SELECT * FROM users WHERE 
+            name = ?;
+        """
+        row = CURSOR.execute(select_sql, (name,)).fetchone()
+        if not row: 
+            insert_sql = """ INSERT INTO users (name, high_score) VALUES (?, ?);"""
+            CURSOR.execute(insert_sql, (name, high_score))
+            CONN.commit()
+            return cls.find_by_id(CURSOR.lastrowid)
+        else:
+            return cls.create_instance(row)
+        
+    #TODO Aggregate method to get highest score of all games by user 
+    

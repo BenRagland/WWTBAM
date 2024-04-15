@@ -1,4 +1,4 @@
-from models.question import *
+from models.question import Question
 
 Question.create_table()
 
