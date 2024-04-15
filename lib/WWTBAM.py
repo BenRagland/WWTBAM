@@ -55,9 +55,9 @@ def play():
     
     # Shuffle the questions, but keep the difficulty levels separate
     #? Should these be class methods??
-    easy_questions = [question for question in questions if question.difficulty == "Easy"]
-    medium_questions = [question for question in questions if question.difficulty == "Medium"]
-    hard_questions = [question for question in questions if question.difficulty == "Hard"]
+    easy_questions = [question for question in questions if question.difficulty['diffculty'] == "Easy"]
+    medium_questions = [question for question in questions if question.difficulty['difficulty'] == "Medium"]
+    hard_questions = [question for question in questions if question.difficulty['difficulty'] == "Hard"]
 
     random.shuffle(easy_questions)
     random.shuffle(medium_questions)
@@ -67,7 +67,7 @@ def play():
     random.shuffle(game_questions)
 
     game = Game.create(user_id=cur_user.id) #TODO global cur_user? how to get id - find or create method
-    print(f"\nWelcome to WWTBAM {cur_user.name}!") #TODO make this better
+    print(f"\nWelcome to WWTBAM, {cur_user.name}!") #TODO make this better
 
     # Loop through 15 questions list
     for index, question in enumerate(game_questions):
@@ -83,7 +83,7 @@ def play():
         answer = get_user_input(ANSWER_OPTIONS) #get user input
 
         # If the answer is correct, update the player's score and print "Correct!"
-        if answer == chr(97 + options.index(question.answer)).lower():
+        if answer == chr(97 + options.index(question.correct_answer)).lower():
             print("\nCorrect!")
             game.update_score(index)
 
