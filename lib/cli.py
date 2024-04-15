@@ -19,6 +19,7 @@ def main():
     Users.create_table()
     Question.create_table()
     Game.create_table()
+    greeting()
 
     while True:
         menu()
@@ -33,11 +34,16 @@ def main():
             print(f"Welcome, {cur_user.name}!")
         elif choice == '2':
             #prints all games 
-            print(Users.get_games_by_user(cur_user.id)) 
+            print(Game.get_games_by_user(cur_user.id)) 
         elif choice == '3':
             pass
         elif choice == '4':
-        # else:
+            play(cur_user)
+
+        elif choice == '5':
+            Users.delete_row(cur_user.id)
+            cur_user = None
+        else:
             print("Invalid choice")
 #wait til errthang is finished and do menu all together?
 
