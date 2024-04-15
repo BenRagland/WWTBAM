@@ -8,7 +8,7 @@ POINTS = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 25000,
           50000, 100000, 250000, 500000, 1000000]
 class Game:
 
-    def __init__(self, cur_score='$0', final_score='$0', 
+    def __init__(self, cur_score=0, final_score=0, 
                  date=datetime.datetime.now().date().strftime("%m/%d/%y"), id=None, user_id=None):
         self.cur_score = cur_score
         self.final_score = final_score

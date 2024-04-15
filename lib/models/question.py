@@ -18,6 +18,7 @@ class Question:
         self.correct_answer = correct_answer
         self.difficulty = difficulty.difficulty
         self.id = id
+        self.save()
         type(self).all.append(self)
         
     @property
