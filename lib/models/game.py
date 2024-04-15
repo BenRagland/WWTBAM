@@ -4,6 +4,7 @@ import datetime
 CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
 
+#these are the values of what cur_score and then final_score could be 
 POINTS = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 25000,
           50000, 100000, 250000, 500000, 1000000]
 class Game:
@@ -53,7 +54,8 @@ class Game:
         self.id = CURSOR.lastrowid
 
     @classmethod
-    def create(cls, cur_score, final_score, date, user_id):
+    def create(cls, cur_score=0, final_score=0, 
+                 date=datetime.datetime.now().date().strftime("%m/%d/%y"), user_id=None):
         game = cls(cur_score, final_score, date, user_id)
         game.save()
         return game
@@ -88,6 +90,7 @@ class Game:
     def update_score(self, index):
         self.cur_score = POINTS[index]
         self.update()
+
 
     def __repl__(self):
         return f'<Game ID: {self.id}, High Score: {self.final_score}, Date: {self.date}'

@@ -1,7 +1,9 @@
 import random
 from models.question import Question
 from models.game import *
-from cli import *
+from cli import (
+    main
+)
 
 #TODO LET'S MAKE MOST OF THIS LOGIC HELPER FUNCTIONS
 
@@ -21,10 +23,10 @@ def get_user_input(valid_input):
                   Enter 1, 2, or 3 to use a lifeline \nOR \n 
                   Enter 8 to Walk Away""")
             
-def game_over(game):
+def game_over(game, cur_user):
     print(f'You walked away with {game.final_score}')
     print(f"Thanks for playing, {cur_user.name}")
-
+    #TODO Add User class method to get/update user high score after each game is played
     game.update()
 
     """Prompt the player to either restart or quit the game"""
@@ -42,7 +44,7 @@ def game_over(game):
                 to return to the main menu.""")
 
 # Main method to run game
-def play():
+def play(cur_user):
 
     ask_the_audience_used = False
     phone_a_friend_used = False
@@ -82,8 +84,9 @@ def play():
 
         answer = get_user_input(ANSWER_OPTIONS) #get user input
 
+        #control flow of user input either answer or lifeline option
         # If the answer is correct, update the player's score and print "Correct!"
-        if answer == chr(97 + options.index(question.correct_answer)).lower():
+        if answer == chr(97 + options.index(question.correct_answer)).lower(): 
             print("\nCorrect!")
             game.update_score(index)
 
@@ -130,7 +133,7 @@ def play():
         elif answer == '8':
                 print(f'\n You decided to walk away with ${game.cur_score}.')
                 game.final_score = game.cur_score
-                game_over(game)
+                game_over(game, cur_user)
         else:
             print("\nI'm sorry, but that's incorrect!")
             for save_point in SAVE_POINTS:
@@ -139,7 +142,7 @@ def play():
                     break
                 else:
                     game.final_score = 0
-            game_over(game)
+            game_over(game, cur_user)
 
         # Print player's current score
         print(f'Your total is now: ${game.cur_score}')
@@ -147,4 +150,4 @@ def play():
     # Print after all questions have been answered
     print(f"CONGRATULATIONS, {cur_user.name}!! You're a millionaire!")
     game.final_score = game.cur_score
-    game_over(game)
+    game_over(game, cur_user)
