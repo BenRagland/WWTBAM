@@ -2,9 +2,6 @@ import random
 from models.question import Question
 from seed.question_seed import seed_questions
 from models.game import *
-from cli import (
-    main
-)
 import os
 import time
 
@@ -48,7 +45,7 @@ def get_user_input(valid_input):
             print("Invalid input.")
             print(options_text)
             
-def game_over(game, cur_user):
+def game_over(game, cur_user, main_callback):
     print(f'You walked away with ${game.final_score}')
     print(f"Thanks for playing, {cur_user.name}")
     #TODO Add User class method to get/update user high score after each game is played
@@ -59,17 +56,17 @@ def game_over(game, cur_user):
         choice = input("Would you like to restart the game (r), return to the main menu (m), or quit (q)?: "
                     ).lower()
         if choice == 'r':
-            return play(cur_user) #restart
+            return play(cur_user, main_callback) #restart
         elif choice == 'q':
             return exit() #quit
         elif choice == 'm':
-            return main()
+            return main_callback()
         else: #If the input is invalid, print an error message.
             print("""Invalid input. Please enter 'r' to restart, 'q' to quit or 'm' 
                 to return to the main menu.""")
 
 # Main method to run game
-def play(cur_user):
+def play(cur_user, main_callback):
     os.system('clear')
     game = Game.create(user_id = cur_user.id)
     populate_default_questions()
@@ -185,11 +182,11 @@ def play(cur_user):
                             break
                         else:
                             game.final_score = 0
-                    game_over(game, cur_user)
+                    game_over(game, cur_user, main_callback)
             elif answer == '8':
                     print(f'\nYou decided to walk away.')
                     game.final_score = game.cur_score
-                    return game_over(game, cur_user)
+                    return game_over(game, cur_user, main_callback)
             else:
                 print("\nI'm sorry, but that's incorrect!")
                 for save_point in SAVE_POINTS:
@@ -198,9 +195,9 @@ def play(cur_user):
                         break
                     else:
                         game.final_score = 0
-                game_over(game, cur_user)
+                game_over(game, cur_user, main_callback)
 
     # Print after all questions have been answered
     print(f"CONGRATULATIONS, {cur_user.name}!! You're a millionaire!")
     game.final_score = game.cur_score
-    game_over(game, cur_user)
+    game_over(game, cur_user, main_callback)

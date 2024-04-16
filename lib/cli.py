@@ -16,7 +16,6 @@ from models.question import Question
 from models.game import Game
 from WWTBAM import *
 
-
 cur_user = None
 
 # populate questions table with seed data
@@ -57,7 +56,7 @@ def main():
         elif choice == '3':
             get_user_high_score(cur_user.id)
         elif choice == '4':
-            play(cur_user)
+            play(cur_user, main)
         elif choice == '5':
             get_all_high_scores()
         elif choice == '6':
