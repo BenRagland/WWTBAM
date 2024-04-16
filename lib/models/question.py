@@ -13,7 +13,7 @@ class Question:
     all = []
     DEFAULT_QUESTIONS = []
         
-    def __init__(self, question="", answers = [], correct_answer="", difficulty={}, id=None, quiz_id = None):
+    def __init__(self, question="", answers = None, correct_answer="", difficulty={}, id=None, quiz_id = None):
         self.question = question 
         self.answers = answers
         self.correct_answer = correct_answer
@@ -30,7 +30,9 @@ class Question:
     
     @answers.setter
     def answers(self, answers):
-        if isinstance (answers, list) and len(answers) == 4:
+        if answers is None:
+            self._answers = []
+        elif isinstance(answers, list) and len(answers) == 4:
             self._answers = answers
         else:
             raise Exception("Answers should be a list of 4 answers")

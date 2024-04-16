@@ -17,19 +17,6 @@ from WWTBAM import *
 
 cur_user = None
 
-# populate questions table with seed data
-def populate_default_questions():
-    Question.drop_table()
-    Question.create_table()
-
-    #Create The Question Objs
-    for item in seed_questions:
-        Question(*item)
-
-    # #Create rows in questions table with each Obj
-    # [obj.create_row() for obj in question_objs_list]
-    
-
 def main():
     
     Users.create_table()
