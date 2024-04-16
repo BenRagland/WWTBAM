@@ -122,5 +122,10 @@ class Users:
         else:
             return cls.create_instance(row)
         
+    
+        
     #TODO Aggregate method to get highest score of all games by user 
     
+    #Aggregate See all high scores , show users with the score 
+    
+
