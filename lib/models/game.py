@@ -94,5 +94,5 @@ class Game:
         self.update()
 
 
-    def __repl__(self):
-        return f'<Game ID: {self.id}, High Score: {self.final_score}, Date: {self.date}'
+    def __repr__(self):
+        return f'\n<Game ID: {self.id}, Final Score: {self.final_score}, Date: {self.date}'
