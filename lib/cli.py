@@ -55,13 +55,12 @@ def main():
             else:
                 print('You haven\'t played any games yet!')
         elif choice == '3':
-            pass
+            get_user_high_score(cur_user.id)
+            # print(f"Your high score: {user_high_score}")
         elif choice == '4':
             play(cur_user)
-
-        # elif choice == '5':
-
-
+        elif choice == '5':
+            get_all_high_scores()
         elif choice == '6':
             #TODO add an "are you sure?"
             Users.delete_row(cur_user.id)
