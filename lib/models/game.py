@@ -96,3 +96,20 @@ class Game:
 
     def __repr__(self):
         return f'\n<Game ID: {self.id}, Final Score: {self.final_score}, Date: {self.date}>'
+    
+    @classmethod
+    def get_user_high_score(cls, user_id):
+        sql = """
+            SELECT MAX(final_score) FROM games WHERE user_id = ?;
+        """
+        high_score = CURSOR.execute(sql, (user_id,)).fetchone()[0]
+        return high_score if high_score else 0
+        
+    @classmethod    
+    def get_all_high_scores(cls):
+        sql = """
+            SELECT user_id, MAX(final_score) FROM games GROUP BY user_id;
+        """
+        high_scores = CURSOR.execute(sql).fetchall()
+        return high_scores
+        

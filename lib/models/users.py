@@ -4,7 +4,7 @@ CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
 
 class Users:
-    def __init__(self,name,high_score = 0,id=None):
+    def __init__(self,name,high_score = 0,id="none"):
         self.id = id
         self.name = name
         self.high_score = high_score
@@ -54,7 +54,7 @@ class Users:
         user.save()
         return user
     
-   #deletes row with and id
+    #deletes row with and id
     @classmethod
     def delete_row(cls,id):
         try:
@@ -106,7 +106,7 @@ class Users:
         sql = """DROP TABLE IF EXISTS users;"""
         CURSOR.execute(sql)
         CONN.commit()
-
+        
     @classmethod 
     def find_or_create_by(cls, name=None, high_score=0):
         select_sql = """ 
@@ -128,4 +128,22 @@ class Users:
     
     #Aggregate See all high scores , show users with the score 
     
-
+        
+    @classmethod
+    def get_user_high_score(cls, user_id):
+        sql = """
+            SELECT MAX(final_score) FROM games WHERE user_id = ?;
+        """
+        high_score = CURSOR.execute(sql, (user_id,)).fetchone()[0]
+        return high_score if high_score else 0
+        
+    @classmethod    
+    def get_all_high_scores(cls):
+        sql = """
+            SELECT u.id, u.name, MAX(g.final_score) as high_score
+            FROM games g
+            JOIN users u ON g.user_id = u.id
+            GROUP BY g.user_id
+        """
+        high_scores = CURSOR.execute(sql).fetchall()
+        return high_scores
