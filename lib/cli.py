@@ -1,7 +1,7 @@
 # lib/cli.py
 from cprint import cprint
 import time
-
+from lib.seed.question_seed import seed_quesiton
 from helpers.helpers import (
     exit_program,
     list_users,
@@ -17,12 +17,23 @@ from WWTBAM import *
 
 cur_user = None
 
-def main():
-    Users.create_table()
+# populate questions table with seed data
+def populate_default_questions():
     Question.create_table()
-    Game.create_table()
+
+    #Create The Question Objs
+    question_objs_list = [ Question(*item) for item in seed_quesiton ]
+
+    #Create rows in questions table with each Obj
+    [obj.create_row() for obj in question_objs_list]
     
 
+def main():
+    
+    Users.create_table()
+    populate_default_questions()
+    Game.create_table()
+    
     while True:
         menu()
         choice = input("> ")

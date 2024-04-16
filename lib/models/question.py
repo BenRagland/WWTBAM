@@ -1,7 +1,7 @@
 #lib/models/question.py
 import sqlite3
 import pickle
-# from seed.question_seed import questions_easy
+from seed.question_seed import seed_questions
 
 
 CONN = sqlite3.connect('database.db')
@@ -11,14 +11,15 @@ class Question:
     
     #list of objects saved to the database
     all = []
-    # DEFAULT_QUESTIONS = questions_easy
-    
-    def __init__(self, question="", answers = [], correct_answer="", difficulty={}, id=None):
+    DEFAULT_QUESTIONS = []
+        
+    def __init__(self, question="", answers = [], correct_answer="", difficulty={}, id=None, quiz_id = None):
         self.question = question 
         self.answers = answers
         self.correct_answer = correct_answer
         self.difficulty = difficulty['difficulty']
         self.id = id
+        self.quiz_id = quiz_id
         type(self).all.append(self)
         self.save()
 
@@ -44,11 +45,13 @@ class Question:
                 question TEXT,
                 answers TEXT,
                 correct_answer TEXT,
-                difficulty TEXT);
+                difficulty BLOB);
                 """
         CURSOR.execute(sql)
         CONN.commit()
 
+
+    #Save - Insert into table
     def save(self):
         db_answers = pickle.dumps(self.answers)
         db_difficulty = pickle.dumps(self.difficulty)
@@ -60,6 +63,7 @@ class Question:
             CURSOR.execute(sql,(self.question, db_answers,self.correct_answer, db_difficulty)).fetchone()
             self.id = CURSOR.lastrowid
             CONN.commit()
+           
         except Exception as err:
             print(f'Save went wrong,{err}')
 

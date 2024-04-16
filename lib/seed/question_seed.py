@@ -1,5 +1,5 @@
 
-questions_easy = [
+seed_questions = [
     ["What is the chemical symbol for gold?", ["Au", "Ag", "Cu", "Fe"], "Au", {"difficulty": "Easy"}],
     ["Who painted the Mona Lisa?", ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"], "Leonardo da Vinci", {"difficulty": "Easy"}],
     ["What is the currency used in Japan?", ["Yen", "Dollar", "Euro", "Pound"], "Yen", {"difficulty": "Easy"}],
@@ -8,10 +8,7 @@ questions_easy = [
     ["What is the largest ocean on Earth?", ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], "Pacific Ocean", {"difficulty": "Easy"}],
     ["What is the capital city of Australia?", ["Sydney", "Melbourne", "Brisbane", "Canberra"], "Canberra", {"difficulty": "Easy"}],
     ["What is the capital of Italy?", ["Rome", "Milan", "Florence", "Venice"], "Rome", {"difficulty": "Easy"}],
-    ["Who wrote 'Romeo and Juliet'?", ["William Shakespeare", "Charles Dickens", "Jane Austen", "Mark Twain"], "William Shakespeare", {"difficulty": "Easy"}]
-]
-
-questions_med = [
+    ["Who wrote 'Romeo and Juliet'?", ["William Shakespeare", "Charles Dickens", "Jane Austen", "Mark Twain"], "William Shakespeare", {"difficulty": "Easy"}],
     ["Which planet is known as the 'Morning Star' or 'Evening Star'?", ["Mars", "Venus", "Mercury", "Saturn"], "Venus", {"difficulty": "Medium"}],
     ["Who was the first female Prime Minister of the United Kingdom?", ["Margaret Thatcher", "Theresa May", "Angela Merkel", "Jacinda Ardern"], "Margaret Thatcher", {"difficulty": "Medium"}],
     ["What is the term for a group of porcupines?", ["A prickle", "A quill", "A spike", "A herd"], "A prickle", {"difficulty": "Medium"}],
@@ -21,10 +18,7 @@ questions_med = [
     ["Which artist painted 'Starry Night'?", ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"], "Vincent van Gogh", {"difficulty": "Medium"}],
     ["Which country is famous for the Great Wall?", ["China", "Japan", "India", "Russia"], "China", {"difficulty": "Medium"}],
     ["What is the smallest prime number greater than 10?", ["11", "12", "13", "14"], "11", {"difficulty": "Medium"}],
-    ["Who composed the 'Four Seasons'?", ["Antonio Vivaldi", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Johann Sebastian Bach"], "Antonio Vivaldi", {"difficulty": "Medium"}]
-]
-
-hard_questions = [
+    ["Who composed the 'Four Seasons'?", ["Antonio Vivaldi", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Johann Sebastian Bach"], "Antonio Vivaldi", {"difficulty": "Medium"}],
     ["Which ancient civilization built the city of Carthage?", ["Greeks", "Romans", "Phoenicians", "Persians"], "Phoenicians", {"difficulty": "Hard"}],
     ["What is the chemical symbol for the element Mercury?", ["Hg", "Me", "Mr", "Hy"], "Hg", {"difficulty": "Hard"}],
     ["Which country has the longest coastline?", ["Canada", "Russia", "Australia", "Brazil"], "Canada", {"difficulty": "Hard"}],
