@@ -1,7 +1,7 @@
 # lib/cli.py
 from cprint import cprint
 import time
-from lib.seed.question_seed import seed_quesiton
+from seed.question_seed import seed_questions
 from helpers.helpers import (
     exit_program,
     list_users,
@@ -19,19 +19,20 @@ cur_user = None
 
 # populate questions table with seed data
 def populate_default_questions():
+    Question.drop_table()
     Question.create_table()
 
     #Create The Question Objs
-    question_objs_list = [ Question(*item) for item in seed_quesiton ]
+    for item in seed_questions:
+        Question(*item)
 
-    #Create rows in questions table with each Obj
-    [obj.create_row() for obj in question_objs_list]
+    # #Create rows in questions table with each Obj
+    # [obj.create_row() for obj in question_objs_list]
     
 
 def main():
     
     Users.create_table()
-    populate_default_questions()
     Game.create_table()
     
     while True:
