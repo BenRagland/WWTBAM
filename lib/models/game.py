@@ -1,5 +1,6 @@
 import sqlite3
 import datetime
+from models.users import Users
 
 CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
@@ -53,6 +54,10 @@ class Game:
         CONN.commit()
 
         self.id = CURSOR.lastrowid
+        #updates users high score
+        new_high_score = Users.get_user_high_score(self.user_id)
+        if self.final_score > new_high_score:
+            Users.update_high_score(self.user_id, self.final_score)
 
     @classmethod
     def create(cls, user_id, cur_score=0, final_score=0, 
@@ -97,19 +102,5 @@ class Game:
     def __repr__(self):
         return f'\n<Game ID: {self.id}, Final Score: {self.final_score}, Date: {self.date}>'
     
-    @classmethod
-    def get_user_high_score(cls, user_id):
-        sql = """
-            SELECT MAX(final_score) FROM games WHERE user_id = ?;
-        """
-        high_score = CURSOR.execute(sql, (user_id,)).fetchone()[0]
-        return high_score if high_score else 0
-        
-    @classmethod    
-    def get_all_high_scores(cls):
-        sql = """
-            SELECT user_id, MAX(final_score) FROM games GROUP BY user_id;
-        """
-        high_scores = CURSOR.execute(sql).fetchall()
-        return high_scores
+
         

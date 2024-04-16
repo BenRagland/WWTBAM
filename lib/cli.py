@@ -56,7 +56,6 @@ def main():
                 print('You haven\'t played any games yet!')
         elif choice == '3':
             get_user_high_score(cur_user.id)
-            # print(f"Your high score: {user_high_score}")
         elif choice == '4':
             play(cur_user)
         elif choice == '5':

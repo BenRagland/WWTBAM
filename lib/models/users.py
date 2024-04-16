@@ -147,3 +147,13 @@ class Users:
         """
         high_scores = CURSOR.execute(sql).fetchall()
         return high_scores
+    
+    @classmethod
+    def update_high_score(cls, user_id, new_high_score):
+        sql = """
+            UPDATE users
+            SET high_score = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (new_high_score, user_id))
+        CONN.commit()
