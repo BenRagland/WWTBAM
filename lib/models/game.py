@@ -9,14 +9,14 @@ POINTS = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 25000,
           50000, 100000, 250000, 500000, 1000000]
 class Game:
 
-    def __init__(self, cur_score=0, final_score=0, 
-                 date=datetime.datetime.now().date().strftime("%m/%d/%y"), id=None, user_id=None):
+    def __init__(self, user_id, cur_score=0, final_score=0, 
+                 date=datetime.datetime.now().date().strftime("%m/%d/%y"), id=None):
         self.cur_score = cur_score
         self.final_score = final_score
         self.date = date
         self.id = id
         self.user_id = user_id
-        self.save()
+      
 
     @classmethod 
     def create_table(cls):
@@ -44,19 +44,21 @@ class Game:
     
 
     def save(self):
-            
+
         sql = """
             INSERT INTO games (cur_score, final_score, date, user_id)
             VALUES (?, ?, ?, ?);
         """
         CURSOR.execute(sql, (self.cur_score, self.final_score, self.date, self.user_id))
         CONN.commit()
+
         self.id = CURSOR.lastrowid
 
     @classmethod
-    def create(cls, cur_score=0, final_score=0, 
-                 date=datetime.datetime.now().date().strftime("%m/%d/%y"), user_id=None):
-        game = cls(cur_score, final_score, date, user_id)
+    def create(cls, user_id, cur_score=0, final_score=0, 
+                 date=datetime.datetime.now().date().strftime("%m/%d/%y"), ):
+  
+        game = cls(user_id, cur_score, final_score, date)
         game.save()
         return game
     

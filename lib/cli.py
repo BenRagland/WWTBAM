@@ -31,7 +31,7 @@ def main():
             print("Enter your username:")
             username = input('> ')
             cur_user = Users.find_or_create_by(username.upper())
-            print(f"Welcome, {cur_user.name}!")
+            print(f"Welcome, {cur_user}!")
         elif choice == '2':
             #prints all games 
             print(Game.get_games_by_user(cur_user.id)) 
@@ -40,7 +40,10 @@ def main():
         elif choice == '4':
             play(cur_user)
 
-        elif choice == '5':
+        # elif choice == '5':
+
+
+        elif choice == '6':
             Users.delete_row(cur_user.id)
             cur_user = None
         else:
@@ -55,7 +58,8 @@ def menu():
         print('2. See all games played')
         print('3. See my High Score')
         print('4. Play New Game')
-        print('5. Delete Current User')
+        print('5. View all High Scores')
+        print('6. Delete Current User')
 
 
 #constant variable    
