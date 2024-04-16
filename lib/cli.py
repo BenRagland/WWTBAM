@@ -1,5 +1,6 @@
 # lib/cli.py
 from cprint import cprint
+import time
 
 from helpers.helpers import (
     exit_program,
@@ -20,7 +21,7 @@ def main():
     Users.create_table()
     Question.create_table()
     Game.create_table()
-    greeting()
+    
 
     while True:
         menu()
@@ -75,11 +76,20 @@ WHO WANTS TO BE A...
 ╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝  ╚═╝
     """
 
+# def greeting():
+#     # cprint(BANNER, c='m')
+#     for kk in range(len(BANNER)):
+#         print(BANNER[0:kk+1+1], end = '\r')
+#         time.sleep(0.1)
+#     #add more greeting
+
 def greeting():
-    cprint(BANNER, c='m')
-    #add more greeting
-
-
+    for char in BANNER:
+        cprint(char, end='', flush=True, c='m')
+        time.sleep(0.05)
 
 if __name__ == "__main__":
+    greeting()
     main()
+    
+    
