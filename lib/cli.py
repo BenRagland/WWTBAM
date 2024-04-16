@@ -33,10 +33,13 @@ def main():
             print("Enter your username:")
             username = input('> ')
             cur_user = Users.find_or_create_by(username.upper())
-            print(f"Welcome, {cur_user}!")
+            print(f"Welcome, {cur_user.name}!")
         elif choice == '2':
             #prints all games 
-            print(Game.get_games_by_user(cur_user.id)) 
+            if Game.get_games_by_user(cur_user.id):
+                print(Game.get_games_by_user(cur_user.id)) 
+            else:
+                print('You haven\'t played any games yet!')
         elif choice == '3':
             pass
         elif choice == '4':
@@ -46,6 +49,7 @@ def main():
 
 
         elif choice == '6':
+            #TODO add an "are you sure?"
             Users.delete_row(cur_user.id)
             cur_user = None
         else:
@@ -86,7 +90,7 @@ WHO WANTS TO BE A...
 def greeting():
     for char in BANNER:
         cprint(char, end='', flush=True, c='m')
-        time.sleep(0.05)
+        time.sleep(0.005)
 
 if __name__ == "__main__":
     greeting()
