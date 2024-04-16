@@ -96,6 +96,8 @@ def play(cur_user):
 
     # Loop through 15 questions list
     for index, question in enumerate(game_questions):
+        # Print player's current score
+        print(f'Your total is now: ${game.cur_score}')
         print(f'\nFor ${POINTS[index]}:')
         print(f"{question.question}") #print the question
 
@@ -106,74 +108,75 @@ def play(cur_user):
             print(f"{ANSWER_OPTIONS[j]}. {option}") #print the options
 
         answer = get_user_input(ANSWER_OPTIONS) #get user input
-
+        answered = False
         #control flow of user input either answer or lifeline option
         # If the answer is correct, update the player's score and print "Correct!"
-        if answer == chr(97 + options.index(question.correct_answer)).lower(): 
-            print("\nCorrect!")
-            game.update_score(index)
+        while not answered:
+            if answer == chr(97 + options.index(question.correct_answer)).lower(): 
+                answered = True
+                print("\nCorrect!")
+                game.update_score(index)
 
-        elif answer == '1' and not ask_the_audience_used:
-            ask_the_audience_used = True
-            ANSWER_OPTIONS.remove('1')
+            elif answer == '1' and not ask_the_audience_used:
+                ask_the_audience_used = True
+                ANSWER_OPTIONS.remove('1')
 
-            #TODO maybe add some actual math/logic here to render random amounts (majority for correct)
-            print(f"The results are in! 60% of the audience thinks the answer is: {question.correct_answer}")
-            print(f"{question.question}")
-            print(f"{ANSWER_OPTIONS[j]}. {option}")
-            answer = get_user_input(ANSWER_OPTIONS)
-       
-        elif answer == '2' and not phone_a_friend_used:
-            phone_a_friend_used = True
-            ANSWER_OPTIONS.remove('2')
+                #TODO maybe add some actual math/logic here to render random amounts (majority for correct)
+                print(f"The results are in! 60% of the audience thinks the answer is: {question.correct_answer}")
+                print(f"{question.question}")
+                for j, option in enumerate(options):
+                    print(f"{ANSWER_OPTIONS[j]}. {option}")
+                answer = get_user_input(ANSWER_OPTIONS)
+        
+            elif answer == '2' and not phone_a_friend_used:
+                phone_a_friend_used = True
+                ANSWER_OPTIONS.remove('2')
 
-            correct_answer_probability = 0.8  # 80% chance of getting the correct answer
-            if random.random() < correct_answer_probability: #random.random() generates a float between 0.0 and 1.0
-                print(f"""Hi, {cur_user.name}! Thanks for calling me! I'm gonna have to say the 
-                  correct answer is: {question.correct_answer}""")
-            else:
-                wrong_answers = [answer for answer in question.answers if answer != question.correct_answer]
-                print(f"""Hi, {cur_user.name}! Thanks for calling me! Uh, I think I'm gonna have to say 
-                  the correct answer is: {random.choice(wrong_answers)}""")
-            print(f"{question.question}")
-            print(f"{ANSWER_OPTIONS[j]}. {option}")
-            answer = get_user_input(ANSWER_OPTIONS)
-
-        elif answer == '3'and not fifty_fifty_used:
-            fifty_fifty_used = True
-            ANSWER_OPTIONS.remove('3')
-
-            # Create a list of incorrect answers
-            incorrect_answers = [option for option in options if option != question.correct_answer]
-            
-            # Randomly remove two incorrect answers
-            two_incorrect_answers = random.sample(incorrect_answers, 2)
-            for incorrect_answer in two_incorrect_answers:
-                options.remove(incorrect_answer)
-            
-            print(f"{question.question}")
-            # Print the remaining options
-            for j, option in enumerate(options):
-                print(f"{ANSWER_OPTIONS[j]}. {option}")
-            
-            # Get the user's answer again
-            answer = get_user_input(ANSWER_OPTIONS)
-        elif answer == '8':
-                print(f'\nYou decided to walk away.')
-                game.final_score = game.cur_score
-                return game_over(game, cur_user)
-        else:
-            print("\nI'm sorry, but that's incorrect!")
-            for save_point in SAVE_POINTS:
-                if game.cur_score >= save_point:
-                    game.final_score = save_point
-                    break
+                correct_answer_probability = 0.8  # 80% chance of getting the correct answer
+                if random.random() < correct_answer_probability: #random.random() generates a float between 0.0 and 1.0
+                    print(f"""Hi, {cur_user.name}! Thanks for calling me! I'm gonna have to say the 
+                    correct answer is: {question.correct_answer}""")
                 else:
-                    game.final_score = 0
-            game_over(game, cur_user)
+                    wrong_answers = [answer for answer in question.answers if answer != question.correct_answer]
+                    print(f"""Hi, {cur_user.name}! Thanks for calling me! Uh, I think I'm gonna have to say 
+                    the correct answer is: {random.choice(wrong_answers)}""")
+                print(f"{question.question}")
+                for j, option in enumerate(options):
+                    print(f"{ANSWER_OPTIONS[j]}. {option}")
+                answer = get_user_input(ANSWER_OPTIONS)
 
-        # Print player's current score
-        print(f'Your total is now: ${game.cur_score}')
+            elif answer == '3'and not fifty_fifty_used:
+                fifty_fifty_used = True
+                ANSWER_OPTIONS.remove('3')
+
+                # Create a list of incorrect answers
+                incorrect_answers = [option for option in options if option != question.correct_answer]
+                
+                # Randomly remove two incorrect answers
+                two_incorrect_answers = random.sample(incorrect_answers, 2)
+                for incorrect_answer in two_incorrect_answers:
+                    options.remove(incorrect_answer)
+                
+                print(f"{question.question}")
+                # Print the remaining options
+                for j, option in enumerate(options):
+                    print(f"{ANSWER_OPTIONS[j]}. {option}")
+                
+                # Get the user's answer again
+                answer = get_user_input(ANSWER_OPTIONS)
+            elif answer == '8':
+                    print(f'\nYou decided to walk away.')
+                    game.final_score = game.cur_score
+                    return game_over(game, cur_user)
+            else:
+                print("\nI'm sorry, but that's incorrect!")
+                for save_point in SAVE_POINTS:
+                    if game.cur_score >= save_point:
+                        game.final_score = save_point
+                        break
+                    else:
+                        game.final_score = 0
+                game_over(game, cur_user)
 
     # Print after all questions have been answered
     print(f"CONGRATULATIONS, {cur_user.name}!! You're a millionaire!")
