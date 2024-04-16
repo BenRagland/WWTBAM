@@ -1,4 +1,5 @@
 # lib/cli.py
+from cprint import cprint
 
 from helpers.helpers import (
     exit_program,
@@ -52,14 +53,14 @@ def main():
 
 def menu():
     print("Please select an option:")
-    print("0. Exit the program")
-    print("1. Enter/Change username")
+    cprint("0. Exit the program", c='g')
+    cprint("1. Enter/Change username", c='c')
     if (cur_user):
-        print('2. See all games played')
-        print('3. See my High Score')
-        print('4. Play New Game')
-        print('5. View all High Scores')
-        print('6. Delete Current User')
+        cprint('2. See all games played', c='y')
+        cprint('3. See my High Score', c='r')
+        cprint('4. Play New Game', c='b')
+        cprint('5. View all High Scores', c='m')
+        cprint('6. Delete Current User', c='g')
 
 
 #constant variable    
@@ -75,7 +76,7 @@ WHO WANTS TO BE A...
     """
 
 def greeting():
-    print(BANNER)
+    cprint(BANNER, c='m')
     #add more greeting
 
 
