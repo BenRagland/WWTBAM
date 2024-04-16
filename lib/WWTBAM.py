@@ -5,6 +5,8 @@ from models.game import *
 from cli import (
     main
 )
+import os
+import time
 
 #TODO LET'S MAKE MOST OF THIS LOGIC HELPER FUNCTIONS
 
@@ -17,6 +19,7 @@ fifty_fifty_used = False
 
 # populate questions table with seed data
 def populate_default_questions():
+    Question.all.clear()
     Question.drop_table()
     Question.create_table()
 
@@ -67,7 +70,7 @@ def game_over(game, cur_user):
 
 # Main method to run game
 def play(cur_user):
- 
+    os.system('clear')
     game = Game.create(user_id = cur_user.id)
     populate_default_questions()
 
@@ -79,7 +82,7 @@ def play(cur_user):
     ANSWER_OPTIONS = ['a', 'b', 'c', 'd', '1', '2', '3', '8']
 
     questions = Question.all
-    
+
     # Shuffle the questions, but keep the difficulty levels separate
     #? Should these be class methods??
     easy_questions = [question for question in questions if question.difficulty == "Easy"]
@@ -95,8 +98,8 @@ def play(cur_user):
     print(f"\nWelcome to WWTBAM, {cur_user.name}!") #TODO make this better
 
     # Loop through 15 questions list
-    for index, question in enumerate(game_questions):
-        # Print player's current score
+    for index, question in enumerate(game_questions): 
+         # Print player's current score
         print(f'Your total is now: ${game.cur_score}')
         print(f'\nFor ${POINTS[index]}:')
         print(f"{question.question}") #print the question
@@ -116,6 +119,8 @@ def play(cur_user):
                 answered = True
                 print("\nCorrect!")
                 game.update_score(index)
+                time.sleep(1)
+                os.system('clear')
 
             elif answer == '1' and not ask_the_audience_used:
                 ask_the_audience_used = True
@@ -149,21 +154,38 @@ def play(cur_user):
                 fifty_fifty_used = True
                 ANSWER_OPTIONS.remove('3')
 
+                options_copy = options.copy()
                 # Create a list of incorrect answers
-                incorrect_answers = [option for option in options if option != question.correct_answer]
+                incorrect_answers = [option for option in options_copy if option != question.correct_answer]
                 
                 # Randomly remove two incorrect answers
                 two_incorrect_answers = random.sample(incorrect_answers, 2)
                 for incorrect_answer in two_incorrect_answers:
-                    options.remove(incorrect_answer)
+                    options_copy.remove(incorrect_answer)
                 
                 print(f"{question.question}")
                 # Print the remaining options
-                for j, option in enumerate(options):
+                for j, option in enumerate(options_copy):
                     print(f"{ANSWER_OPTIONS[j]}. {option}")
                 
                 # Get the user's answer again
                 answer = get_user_input(ANSWER_OPTIONS)
+
+                if answer == chr(97 + options_copy.index(question.correct_answer)).lower():
+                    answered = True
+                    print("\nCorrect!")
+                    game.update_score(index)
+                    time.sleep(1)
+                    os.system('clear')
+                else:
+                    print("\nI'm sorry, but that's incorrect!")
+                    for save_point in SAVE_POINTS:
+                        if game.cur_score >= save_point:
+                            game.final_score = save_point
+                            break
+                        else:
+                            game.final_score = 0
+                    game_over(game, cur_user)
             elif answer == '8':
                     print(f'\nYou decided to walk away.')
                     game.final_score = game.cur_score
