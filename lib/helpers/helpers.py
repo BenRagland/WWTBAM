@@ -1,6 +1,6 @@
 # lib/helpers.py
 from models.users import Users
-
+from models.game import Game
 
 def helper_1():
     print("Performing useful function#1.")
@@ -38,6 +38,17 @@ def update_user():
 #     id_ = input("Enter the user's name: ")
 #     if user := Users.find_by_name
     
+
+def get_user_high_score(user_id):
+    high_score = Game.get_user_high_score(user_id)
+    print(f"user ID {user_id} high score: {high_score}")
+    return high_score
+
+def get_all_high_scores():
+    all_high_scores = Game.get_all_high_scores()
+    for user_id, high_score in all_high_scores:
+        print(f"user ID {user_id} high score: {high_score}")
+    return all_high_scores
 
 def exit_program():
     print("Goodbye!")
