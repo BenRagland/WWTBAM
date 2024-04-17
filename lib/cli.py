@@ -16,20 +16,19 @@ from models.question import Question
 from models.game import Game
 from WWTBAM import *
 
+#constant variable    
+BANNER = """
+WHO WANTS TO BE A...
+
+███╗   ███╗██╗██╗     ██╗     ██╗ ██████╗ ███╗   ██╗ █████╗ ██╗██████╗ ███████╗██████╗ 
+████╗ ████║██║██║     ██║     ██║██╔═══██╗████╗  ██║██╔══██╗██║██╔══██╗██╔════╝╚════██╗
+██╔████╔██║██║██║     ██║     ██║██║   ██║██╔██╗ ██║███████║██║██████╔╝█████╗    ▄███╔╝
+██║╚██╔╝██║██║██║     ██║     ██║██║   ██║██║╚██╗██║██╔══██║██║██╔══██╗██╔══╝    ▀▀══╝ 
+██║ ╚═╝ ██║██║███████╗███████╗██║╚██████╔╝██║ ╚████║██║  ██║██║██║  ██║███████╗  ██╗   
+╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝  ╚═╝
+    """
+
 cur_user = None
-
-# populate questions table with seed data
-def populate_default_questions():
-    Question.drop_table()
-    Question.create_table()
-
-    #Create The Question Objs
-    for item in seed_questions:
-        Question(*item)
-
-    # #Create rows in questions table with each Obj
-    # [obj.create_row() for obj in question_objs_list]
-    
 
 def main():
     
@@ -41,7 +40,7 @@ def main():
         choice = input("> ")
         if choice == "0":
             exit_program()
-        elif choice == "1": #TODO set cur_user (global)
+        elif choice == "1": 
             global cur_user
             print("Enter your username:")
             username = input('> ')
@@ -65,7 +64,7 @@ def main():
             cur_user = None
         else:
             print("Invalid choice")
-#wait til errthang is finished and do menu all together?
+
 
 def menu():
     print("Please select an option:")
@@ -77,26 +76,6 @@ def menu():
         cprint('4. Play New Game', c='b')
         cprint('5. View all High Scores', c='m')
         cprint('6. Delete Current User', c='g')
-
-
-#constant variable    
-BANNER = """
-WHO WANTS TO BE A...
-
-███╗   ███╗██╗██╗     ██╗     ██╗ ██████╗ ███╗   ██╗ █████╗ ██╗██████╗ ███████╗██████╗ 
-████╗ ████║██║██║     ██║     ██║██╔═══██╗████╗  ██║██╔══██╗██║██╔══██╗██╔════╝╚════██╗
-██╔████╔██║██║██║     ██║     ██║██║   ██║██╔██╗ ██║███████║██║██████╔╝█████╗    ▄███╔╝
-██║╚██╔╝██║██║██║     ██║     ██║██║   ██║██║╚██╗██║██╔══██║██║██╔══██╗██╔══╝    ▀▀══╝ 
-██║ ╚═╝ ██║██║███████╗███████╗██║╚██████╔╝██║ ╚████║██║  ██║██║██║  ██║███████╗  ██╗   
-╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝  ╚═╝
-    """
-
-# def greeting():
-#     # cprint(BANNER, c='m')
-#     for kk in range(len(BANNER)):
-#         print(BANNER[0:kk+1+1], end = '\r')
-#         time.sleep(0.1)
-#     #add more greeting
 
 def greeting():
     for char in BANNER:

@@ -5,11 +5,12 @@ from models.game import *
 import os
 import time
 
-#TODO LET'S MAKE MOST OF THIS LOGIC HELPER FUNCTIONS
-
-ANSWER_OPTIONS = ['a', 'b', 'c', 'd', '1', '2', '3', '8']
+#constants for the game 
+ANSWER_OPTIONS = ['a', 'b', 'c', 'd', '1', '2', '3', '8'] #list of valid answers
+#if user gets 1000 points or 25000 points, and get a question wrong they can't get less than that
 SAVE_POINTS = [25000, 1000]
 
+#constants for get_user_input
 ask_the_audience_used = False
 phone_a_friend_used = False
 fifty_fifty_used = False
@@ -23,9 +24,6 @@ def populate_default_questions():
     #Create The Question Objs
     for item in seed_questions:
         Question(*item)
-
-    # #Create rows in questions table with each Obj
-    # [obj.create_row() for obj in question_objs_list]
 
 def get_user_input(valid_input):
     """Get user input and check if it's valid"""
@@ -58,6 +56,12 @@ def game_over(game, cur_user, main_callback):
         Users.update_high_score(game.user_id, game.final_score)
     
     game.update()
+
+    old_high_score = Users.get_user_high_score(game.user_id)
+    if game.final_score > old_high_score:
+        Users.update_high_score(game.final_score, game.user_id)
+    print(old_high_score)
+    print(game.final_score)
 
     """Prompt the player to either restart or quit the game"""
     while True:
