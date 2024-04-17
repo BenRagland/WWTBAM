@@ -9,20 +9,21 @@ CURSOR = CONN.cursor()
 
 class Question:
     
-    #list of objects saved to the database
-    all = []
+    # List of objects saved to the database
+    all = [] # Initialize an empty list to store all question objects created
         
-    def __init__(self, question="", answers = None, correct_answer="", difficulty={}, id=None, quiz_id = None):
+        
+    #constructor to initialize Question object
+    def __init__(self, question="", answers = None, correct_answer="", difficulty={}, id=None):
         self.question = question 
         self.answers = answers
         self.correct_answer = correct_answer
-        self.difficulty = difficulty['difficulty']
+        self.difficulty = difficulty['difficulty'] 
         self.id = id
-        self.quiz_id = quiz_id
-        type(self).all.append(self)
-        self.save()
+        type(self).all.append(self) # Append current instance to the 'all' list of Question objects
+        self.save() # Call save method to save current instance to database
 
-        
+    #getter and setter for answers property
     @property
     def answers(self):
         return self._answers
@@ -32,11 +33,11 @@ class Question:
         if answers is None:
             self._answers = []
         elif isinstance(answers, list) and len(answers) == 4:
-            self._answers = answers
+            self._answers = answers # Set the _answers attribute to the provided list
         else:
             raise Exception("Answers should be a list of 4 answers")
         
-            
+    # Method to create the 'questions' table if it doesn't exist      
     @classmethod
     def create_table(cls):
         """create a new table to persist the attributes of the question instances"""
@@ -48,32 +49,35 @@ class Question:
                 correct_answer TEXT,
                 difficulty BLOB);
                 """
-        CURSOR.execute(sql)
-        CONN.commit()
+        CURSOR.execute(sql) # Execute SQL query to create the 'questions' table
+        CONN.commit() # make permanent changes made within current transaction
 
 
-    #Save - Insert into table
+    # Method to save the Question instance to the database
     def save(self):
-        db_answers = pickle.dumps(self.answers)
+        db_answers = pickle.dumps(self.answers) #serialize answers and difficulty using pickle
         db_difficulty = pickle.dumps(self.difficulty)
 
         try:
             sql="""
                     INSERT INTO questions (question, answers, correct_answer, difficulty) VALUES (?,?,?,?);
                 """
-            CURSOR.execute(sql,(self.question, db_answers,self.correct_answer, db_difficulty)).fetchone()
-            self.id = CURSOR.lastrowid
+            CURSOR.execute(sql,(self.question, db_answers, self.correct_answer, db_difficulty))
+            self.id = CURSOR.lastrowid #update the id of the instance with the last inserted row id
             CONN.commit()
            
         except Exception as err:
             print(f'Save went wrong,{err}')
-
+            
+    
+    # Method to create a new row in the 'questions' table // creates a new question
     @classmethod
     def create_row(cls,question,answer,correct_answer,difficulty):
-        newQuestion = cls(question,answer,correct_answer,difficulty)
-        newQuestion.save()
+        newQuestion = cls(question,answer,correct_answer,difficulty) # Creates new instance
+        newQuestion.save() # Saves new instance to the database
         return newQuestion
     
+    # Method to delete a row from the 'questions' table by id // deletes a question
     @classmethod
     def del_row(cls,id):
         try:
@@ -86,14 +90,48 @@ class Question:
         except Exception as err:
             print(f"Error Deleting {id} error:{err}")
     
-
+    # Method to drop the 'questions' table // destructive operation to delete all questions from database
+    # would only be used during development or if resetting the database schema
     @classmethod
     def drop_table(cls):
         sql=""" DROP TABLE IF EXISTS questions; """
         CURSOR.execute(sql)
         CONN.commit()
     
-    
+    def __repr__(self):
+        return f'Question: {self.question}'
+
+    # Static method to add a new question through the CLI
+    # ** Static methods are designed to be utility or helper functions that perform tasks at the class level,
+    #    not tied to any specific object instance. They operate on input parameters
+    # ** Used a static method because it doesnt depend on any instance or class variables // operates independently to 
+    #    create a new question without modifying any class-level variables or methods
+    @staticmethod
+    def add_new_question():
+        print("Please enter the details for the new question: ")
+        question_text = input("Question: ")
+        
+        #prompt for answers
+        answers = [] # Initialize empty list to store answers 
+        for i in range(4): # Iterate over the range (4 answers)
+            answer = input(f"Enter answer {i+1}: ") # Prompt for each answer
+            answers.append(answer) # Append to list of answers
+            
+        #prompt for correct answer
+        correct_answer = input("Enter the correct answer: ").strip()
+        if correct_answer not in answers: 
+            print("Invalid input. Correct answer must be one of the provided answers")
+            return #this line returns from the function if the correct answer is invalid
+        
+        #prompt for difficulty level
+        difficulty = input("Enter difficulty level (Easy, Medium, Hard): ").capitalize()
+        if difficulty not in ['Easy', 'Medium', 'Hard']: # Check if diff level is valid
+            print("Invalid input. Difficulty level must be 'Easy', 'Medium', or 'Hard'.")
+            return
+        
+        #create the new question object and save it to the database
+        new_question = Question(question_text, answers, correct_answer, {"difficulty": difficulty})
+        print(f'Your question {new_question} has been successfully added to the database!') # Print success message!
     
     
     

@@ -16,8 +16,8 @@ class Users:
     #validate name 
     @name.setter
     def name(self,name):
-        if not (isinstance(name,str)):
-            raise TypeError("name must be a string")
+        if not (isinstance(name,str) and 16 > len(name) > 1):
+            raise Exception("name must be a string and between 2-15 characters")
         else:
             self._name = name.upper()
 
@@ -36,15 +36,23 @@ class Users:
         CURSOR.execute(sql)
         CONN.commit()
     
+    # Validates if there is a duplicate in the table or not
     def save(self):
         try:
-            sql= """
-                INSERT INTO Users (name,high_score) VALUES (?,?);
-                """
-            CURSOR.execute(sql,(self.name,self.high_score))
-            # set ID
-            self.id = CURSOR.lastrowid
-            CONN.commit()
+            select_sql = """
+                SELECT * From users WHERE name = ?
+            """
+            row = CURSOR.execute(select_sql,(self.name,)).fetchone()
+            if not row:
+                sql= """
+                    INSERT INTO Users (name,high_score) VALUES (?,?);
+                    """
+                CURSOR.execute(sql,(self.name,self.high_score))
+                # set ID
+                self.id = CURSOR.lastrowid
+                CONN.commit()
+            else:
+                print(f"user name: {self.name} already exists as id:{self.id}")
         except Exception as err:
             print(f'Save went wrong,{err}')
 
@@ -63,7 +71,7 @@ class Users:
             """
             CONN.execute(sql, (id,))
             CONN.commit()
-            print("success")
+            print("User has been successfully deleted!")
         except Exception as err:
             print(f'error:{err}')
 
@@ -123,12 +131,8 @@ class Users:
             return cls.create_instance(row)
         
     
-        
-    #TODO Aggregate method to get highest score of all games by user 
-    
-    #Aggregate See all high scores , show users with the score 
-    
-        
+    # SQL query to retrieve high score for user with specified id
+    # fetchone() returns a tuple containing values of the selected column, and [0] returns the first element, high score
     @classmethod
     def get_user_high_score(cls, id):
         sql = """
@@ -136,8 +140,8 @@ class Users:
         """
         high_score = CURSOR.execute(sql, (id,)).fetchone()[0]
         return high_score 
-    # if high_score else 0
-        
+    
+    # SQL query to retrieve all high scores and corresponding user ids and names
     @classmethod    
     def get_all_high_scores(cls):
         sql = """
@@ -149,6 +153,7 @@ class Users:
         high_scores = CURSOR.execute(sql).fetchall()
         return high_scores
     
+    #SQL query to update the high score for the user with specified id
     @classmethod
     def update_high_score(cls, new_high_score, user_id):
         sql = """

@@ -91,9 +91,7 @@ class Game:
         CURSOR.execute(sql, (self.cur_score, self.final_score, self.date, self.user_id, self.id))
         CONN.commit()
         
-        new_high_score = Users.get_user_high_score(self.user_id)
-        if self.final_score > new_high_score:
-            Users.update_high_score(self.user_id, self.final_score)
+        
 
     def update_score(self, index):
         self.cur_score = POINTS[index]
