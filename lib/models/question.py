@@ -9,8 +9,8 @@ CURSOR = CONN.cursor()
 
 class Question:
     
-    #list of objects saved to the database
-    all = []
+    # List of objects saved to the database
+    all = [] # Initialize an empty list to store all question objects created
         
         
     #constructor to initialize Question object
@@ -18,10 +18,10 @@ class Question:
         self.question = question 
         self.answers = answers
         self.correct_answer = correct_answer
-        self.difficulty = difficulty['difficulty']
+        self.difficulty = difficulty['difficulty'] 
         self.id = id
-        type(self).all.append(self)
-        self.save()
+        type(self).all.append(self) # Append current instance to the 'all' list of Question objects
+        self.save() # Call save method to save current instance to database
 
     #getter and setter for answers property
     @property
@@ -33,7 +33,7 @@ class Question:
         if answers is None:
             self._answers = []
         elif isinstance(answers, list) and len(answers) == 4:
-            self._answers = answers
+            self._answers = answers # Set the _answers attribute to the provided list
         else:
             raise Exception("Answers should be a list of 4 answers")
         
@@ -49,13 +49,13 @@ class Question:
                 correct_answer TEXT,
                 difficulty BLOB);
                 """
-        CURSOR.execute(sql)
-        CONN.commit()
+        CURSOR.execute(sql) # Execute SQL query to create the 'questions' table
+        CONN.commit() # make permanent changes made within current transaction
 
 
     # Method to save the Question instance to the database
     def save(self):
-        db_answers = pickle.dumps(self.answers)
+        db_answers = pickle.dumps(self.answers) #serialize answers and difficulty using pickle
         db_difficulty = pickle.dumps(self.difficulty)
 
         try:
@@ -63,7 +63,7 @@ class Question:
                     INSERT INTO questions (question, answers, correct_answer, difficulty) VALUES (?,?,?,?);
                 """
             CURSOR.execute(sql,(self.question, db_answers, self.correct_answer, db_difficulty))
-            self.id = CURSOR.lastrowid
+            self.id = CURSOR.lastrowid #update the id of the instance with the last inserted row id
             CONN.commit()
            
         except Exception as err:
@@ -73,8 +73,8 @@ class Question:
     # Method to create a new row in the 'questions' table // creates a new question
     @classmethod
     def create_row(cls,question,answer,correct_answer,difficulty):
-        newQuestion = cls(question,answer,correct_answer,difficulty)
-        newQuestion.save()
+        newQuestion = cls(question,answer,correct_answer,difficulty) # Creates new instance
+        newQuestion.save() # Saves new instance to the database
         return newQuestion
     
     # Method to delete a row from the 'questions' table by id // deletes a question
@@ -112,10 +112,10 @@ class Question:
         question_text = input("Question: ")
         
         #prompt for answers
-        answers = []
-        for i in range(4):
-            answer = input(f"Enter answer {i+1}: ")
-            answers.append(answer)
+        answers = [] # Initialize empty list to store answers 
+        for i in range(4): # Iterate over the range (4 answers)
+            answer = input(f"Enter answer {i+1}: ") # Prompt for each answer
+            answers.append(answer) # Append to list of answers
             
         #prompt for correct answer
         correct_answer = input("Enter the correct answer: ").strip()
@@ -125,13 +125,13 @@ class Question:
         
         #prompt for difficulty level
         difficulty = input("Enter difficulty level (Easy, Medium, Hard): ").capitalize()
-        if difficulty not in ['Easy', 'Medium', 'Hard']:
+        if difficulty not in ['Easy', 'Medium', 'Hard']: # Check if diff level is valid
             print("Invalid input. Difficulty level must be 'Easy', 'Medium', or 'Hard'.")
             return
         
         #create the new question object and save it to the database
         new_question = Question(question_text, answers, correct_answer, {"difficulty": difficulty})
-        print(f'Your question {new_question} has been successfully added to the database!')
+        print(f'Your question {new_question} has been successfully added to the database!') # Print success message!
     
     
     
