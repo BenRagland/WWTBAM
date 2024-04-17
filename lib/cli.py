@@ -59,27 +59,37 @@ def main():
         elif choice == '5':
             get_all_high_scores()
         elif choice == '6':
-            #TODO add an "are you sure?"
-            Users.delete_row(cur_user.id)
-            cur_user = None
-        elif choice == '7':
             Question.add_new_question()
+        elif choice == '7':
+            deleted = False
+            validation = input(f"Are you sure you want to delete user {cur_user.name}? (Y/N)").upper()
+            while deleted == False:
+                if validation == "Y":
+                    deleted == True
+                    print(cur_user.id)
+                    Users.delete_row(cur_user.id)
+                    cur_user = None
+                    main()
+                elif validation == "N":
+                    main()
+                else:
+                    print("Invalid response, please enter either Y or N.")
+                    validation = input(f"Are you sure you want to delete user {cur_user.name}? (Y/N)")
         else:
             print("Invalid choice")
         
-
 
 def menu():
     print("Please select an option:")
     cprint("0. Exit the program", c='g')
     cprint("1. Enter/Change username", c='c')
     if (cur_user):
-        cprint('2. See all games played', c='y')
-        cprint('3. See my High Score', c='r')
-        cprint('4. Play New Game', c='b')
+        cprint('2. Play New Game', c='y')
+        cprint('3. See all games played', c='r')
+        cprint('4. See my High Score', c='b')
         cprint('5. View all High Scores', c='m')
-        cprint('6. Delete Current User', c='g')
-        cprint("7. Add a new question", c='c')  # Option to add a new question
+        cprint("6. Add a new question", c='c')  # Option to add a new question
+        cprint('7. Delete Current User', c='g')
 
 def greeting():
     for char in BANNER:

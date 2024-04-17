@@ -71,7 +71,7 @@ class Users:
             """
             CONN.execute(sql, (id,))
             CONN.commit()
-            print("success")
+            print("User has been successfully deleted!")
         except Exception as err:
             print(f'error:{err}')
 

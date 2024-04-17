@@ -12,13 +12,12 @@ class Question:
     #list of objects saved to the database
     all = []
         
-    def __init__(self, question="", answers = None, correct_answer="", difficulty={}, id=None, quiz_id = None):
+    def __init__(self, question="", answers = None, correct_answer="", difficulty={}, id=None):
         self.question = question 
         self.answers = answers
         self.correct_answer = correct_answer
         self.difficulty = difficulty['difficulty']
         self.id = id
-        self.quiz_id = quiz_id
         type(self).all.append(self)
         self.save()
 
@@ -95,9 +94,12 @@ class Question:
         CURSOR.execute(sql)
         CONN.commit()
     
+    def __repr__(self):
+        return f'Question: {self.question}'
+
     @staticmethod
     def add_new_question():
-        print("Please entr the details for the new question: ")
+        print("Please enter the details for the new question: ")
         question_text = input("Question: ")
         
         #prompt for answers
@@ -120,7 +122,7 @@ class Question:
         
         #create the new question object and save it to the database
         new_question = Question(question_text, answers, correct_answer, {"difficulty": difficulty})
-        new_question.save()
+        print(f'Your question {new_question} has been successfully added to the database!')
     
     
     
