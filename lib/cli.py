@@ -48,7 +48,9 @@ def main():
         elif choice == '3':
             #prints all games 
             if Game.get_games_by_user(cur_user.id):
-                print(Game.get_games_by_user(cur_user.id)) 
+                cprint("************************************************------     ALL GAMES PLAYED    ------************************************** \n ",c='c')
+                for game in Game.get_games_by_user(cur_user.id):
+                    cprint(game,c='y') 
             else:
                 print('You haven\'t played any games yet!')
         elif choice == '4':
@@ -77,7 +79,7 @@ def main():
         
 
 def menu():
-    print("Please select an option:")
+    print("\nPlease select an option: \n")
     cprint("0. Exit the program", c='g')
     cprint("1. Enter/Change username", c='c')
     if (cur_user):

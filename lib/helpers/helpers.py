@@ -1,5 +1,6 @@
 # lib/helpers.py
 from models.users import Users
+from cprint import cprint
 
 
 def helper_1():
@@ -47,12 +48,13 @@ def get_user_high_score(user_id):
 def get_all_high_scores():
     all_high_scores = Users.get_all_high_scores()
     if all_high_scores:
+        print("\n\n************************************************------     All HIGH SCORES    ------************************************** \n \n ")
         for user_id, user_name, high_score in all_high_scores:
             user = Users.find_by_id(user_id)
             if user:
                 print(f"User: {user_name}, High Score: ${high_score}")
             else:
-                print(f"No user found with ID: {user_id}")
+                print(f"No user found with ID: {user_id} \n")
     else:
         print("No high scores found.")
 
