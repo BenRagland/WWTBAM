@@ -4,6 +4,7 @@ from seed.question_seed import seed_questions
 from models.game import *
 import os
 import time
+from helpers.WWTBAM_helpers import *
 
 #TODO LET'S MAKE MOST OF THIS LOGIC HELPER FUNCTIONS
 
@@ -23,47 +24,6 @@ def populate_default_questions():
     #Create The Question Objs
     for item in seed_questions:
         Question(*item)
-
-    # #Create rows in questions table with each Obj
-    # [obj.create_row() for obj in question_objs_list]
-
-def get_user_input(valid_input):
-    """Get user input and check if it's valid"""
-    while True:
-        options_text = "\nPlease enter a, b, c, or d"
-        if '1' in valid_input and not ask_the_audience_used:
-            options_text += "\n1 for Ask the Audience"
-        if '2' in valid_input and not phone_a_friend_used:
-            options_text += "\n2 for Phone a Friend"
-        if '3' in valid_input and not fifty_fifty_used:
-            options_text += "\n3 for 50/50"
-        options_text += "\nOR\nEnter 8 to Walk Away\n>"
-        user_input = input(options_text)
-        if user_input in valid_input:
-            return user_input
-        else: #If the input is invalid, print an error message.
-            print("Invalid input.")
-            print(options_text)
-            
-def game_over(game, cur_user, main_callback):
-    print(f'You walked away with ${game.final_score}')
-    print(f"Thanks for playing, {cur_user.name}")
-    #TODO Add User class method to get/update user high score after each game is played
-    game.update()
-
-    """Prompt the player to either restart or quit the game"""
-    while True:
-        choice = input("Would you like to restart the game (r), return to the main menu (m), or quit (q)?: "
-                    ).lower()
-        if choice == 'r':
-            return play(cur_user, main_callback) #restart
-        elif choice == 'q':
-            return exit() #quit
-        elif choice == 'm':
-            return main_callback()
-        else: #If the input is invalid, print an error message.
-            print("""Invalid input. Please enter 'r' to restart, 'q' to quit or 'm' 
-                to return to the main menu.""")
 
 # Main method to run game
 def play(cur_user, main_callback):
@@ -107,7 +67,7 @@ def play(cur_user, main_callback):
         for j, option in enumerate(options):
             print(f"{ANSWER_OPTIONS[j]}. {option}") #print the options
 
-        answer = get_user_input(ANSWER_OPTIONS) #get user input
+        answer = get_user_input(ANSWER_OPTIONS, ask_the_audience_used, phone_a_friend_used, fifty_fifty_used) #get user input
         answered = False
         #control flow of user input either answer or lifeline option
         # If the answer is correct, update the player's score and print "Correct!"
@@ -120,15 +80,7 @@ def play(cur_user, main_callback):
                 os.system('clear')
 
             elif answer == '1' and not ask_the_audience_used:
-                ask_the_audience_used = True
-                ANSWER_OPTIONS.remove('1')
-
-                #TODO maybe add some actual math/logic here to render random amounts (majority for correct)
-                print(f"The results are in! 60% of the audience thinks the answer is: {question.correct_answer}")
-                print(f"{question.question}")
-                for j, option in enumerate(options):
-                    print(f"{ANSWER_OPTIONS[j]}. {option}")
-                answer = get_user_input(ANSWER_OPTIONS)
+               ask_the_audience(ANSWER_OPTIONS, question, options, phone_a_friend_used, fifty_fifty_used)
         
             elif answer == '2' and not phone_a_friend_used:
                 phone_a_friend_used = True
@@ -145,7 +97,7 @@ def play(cur_user, main_callback):
                 print(f"{question.question}")
                 for j, option in enumerate(options):
                     print(f"{ANSWER_OPTIONS[j]}. {option}")
-                answer = get_user_input(ANSWER_OPTIONS)
+                answer = get_user_input(ANSWER_OPTIONS, ask_the_audience_used, phone_a_friend_used, fifty_fifty_used)
 
             elif answer == '3'and not fifty_fifty_used:
                 fifty_fifty_used = True
@@ -166,7 +118,7 @@ def play(cur_user, main_callback):
                     print(f"{ANSWER_OPTIONS[j]}. {option}")
                 
                 # Get the user's answer again
-                answer = get_user_input(ANSWER_OPTIONS)
+                answer = get_user_input(ANSWER_OPTIONS, ask_the_audience_used, phone_a_friend_used, fifty_fifty_used)
 
                 if answer == chr(97 + options_copy.index(question.correct_answer)).lower():
                     answered = True
@@ -186,7 +138,7 @@ def play(cur_user, main_callback):
             elif answer == '8':
                     print(f'\nYou decided to walk away.')
                     game.final_score = game.cur_score
-                    return game_over(game, cur_user, main_callback)
+                    return game_over(game, cur_user, main_callback, play)
             else:
                 print("\nI'm sorry, but that's incorrect!")
                 for save_point in SAVE_POINTS:
@@ -195,9 +147,9 @@ def play(cur_user, main_callback):
                         break
                     else:
                         game.final_score = 0
-                game_over(game, cur_user, main_callback)
+                game_over(game, cur_user, main_callback, play)
 
     # Print after all questions have been answered
     print(f"CONGRATULATIONS, {cur_user.name}!! You're a millionaire!")
     game.final_score = game.cur_score
-    game_over(game, cur_user, main_callback)
+    game_over(game, cur_user, main_callback, play)

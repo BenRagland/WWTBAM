@@ -2,7 +2,7 @@
 from cprint import cprint
 import time
 from seed.question_seed import seed_questions
-from helpers.helpers import (
+from helpers.main_helpers import (
     exit_program,
     list_users,
     find_user_by_name,
