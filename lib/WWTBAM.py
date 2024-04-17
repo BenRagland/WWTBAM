@@ -111,7 +111,7 @@ def play(cur_user, main_callback):
         for j, option in enumerate(options):
             print(f"{ANSWER_OPTIONS[j]}. {option}") #print the options
 
-        answer = get_user_input(ANSWER_OPTIONS, ask_the_audience_used, phone_a_friend_used, fifty_fifty_used) #get user input
+        answer = get_user_input(ANSWER_OPTIONS) #get user input
         answered = False
         #control flow of user input either answer or lifeline option
         # If the answer is correct, update the player's score and print "Correct!"
@@ -149,7 +149,7 @@ def play(cur_user, main_callback):
                 print(f"{question.question}")
                 for j, option in enumerate(options):
                     print(f"{ANSWER_OPTIONS[j]}. {option}")
-                answer = get_user_input(ANSWER_OPTIONS, ask_the_audience_used, phone_a_friend_used, fifty_fifty_used)
+                answer = get_user_input(ANSWER_OPTIONS)
 
             elif answer == '3'and not fifty_fifty_used:
                 fifty_fifty_used = True
@@ -170,7 +170,7 @@ def play(cur_user, main_callback):
                     print(f"{ANSWER_OPTIONS[j]}. {option}")
                 
                 # Get the user's answer again
-                answer = get_user_input(ANSWER_OPTIONS, ask_the_audience_used, phone_a_friend_used, fifty_fifty_used)
+                answer = get_user_input(ANSWER_OPTIONS)
 
                 if answer == chr(97 + options_copy.index(question.correct_answer)).lower():
                     answered = True
@@ -190,7 +190,7 @@ def play(cur_user, main_callback):
             elif answer == '8':
                     print(f'\nYou decided to walk away.')
                     game.final_score = game.cur_score
-                    return game_over(game, cur_user, main_callback, play)
+                    return game_over(game, cur_user, main_callback)
             else:
                 print("\nI'm sorry, but that's incorrect!")
                 for save_point in SAVE_POINTS:
@@ -199,9 +199,9 @@ def play(cur_user, main_callback):
                         break
                     else:
                         game.final_score = 0
-                game_over(game, cur_user, main_callback, play)
+                game_over(game, cur_user, main_callback)
 
     # Print after all questions have been answered
     print(f"CONGRATULATIONS, {cur_user.name}!! You're a millionaire!")
     game.final_score = game.cur_score
-    game_over(game, cur_user, main_callback, play)
+    game_over(game, cur_user, main_callback)
