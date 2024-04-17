@@ -1,12 +1,9 @@
 # lib/cli.py
 from cprint import cprint
 import time
-from seed.question_seed import seed_questions
+
 from helpers.helpers import (
     exit_program,
-    list_users,
-    find_user_by_name,
-    update_user,
     get_user_high_score,
     get_all_high_scores
 
@@ -88,7 +85,7 @@ def menu():
         cprint('3. See all games played', c='r')
         cprint('4. See my High Score', c='b')
         cprint('5. View all High Scores', c='m')
-        cprint("6. Add a new question", c='c')  # Option to add a new question
+        cprint("6. Add a new question", c='c')  
         cprint('7. Delete Current User', c='g')
 
 def greeting():

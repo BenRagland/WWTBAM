@@ -131,12 +131,8 @@ class Users:
             return cls.create_instance(row)
         
     
-        
-    #TODO Aggregate method to get highest score of all games by user 
-    
-    #Aggregate See all high scores , show users with the score 
-    
-        
+    # SQL query to retrieve high score for user with specified id
+    # fetchone() returns a tuple containing values of the selected column, and [0] returns the first element, high score
     @classmethod
     def get_user_high_score(cls, id):
         sql = """
@@ -144,8 +140,8 @@ class Users:
         """
         high_score = CURSOR.execute(sql, (id,)).fetchone()[0]
         return high_score 
-    # if high_score else 0
-        
+    
+    # SQL query to retrieve all high scores and corresponding user ids and names
     @classmethod    
     def get_all_high_scores(cls):
         sql = """
@@ -157,6 +153,7 @@ class Users:
         high_scores = CURSOR.execute(sql).fetchall()
         return high_scores
     
+    #SQL query to update the high score for the user with specified id
     @classmethod
     def update_high_score(cls, new_high_score, user_id):
         sql = """
