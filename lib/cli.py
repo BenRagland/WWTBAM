@@ -62,8 +62,11 @@ def main():
             #TODO add an "are you sure?"
             Users.delete_row(cur_user.id)
             cur_user = None
+        elif choice == '7':
+            Question.add_new_question()
         else:
             print("Invalid choice")
+        
 
 
 def menu():
@@ -76,6 +79,7 @@ def menu():
         cprint('4. Play New Game', c='b')
         cprint('5. View all High Scores', c='m')
         cprint('6. Delete Current User', c='g')
+        cprint("7. Add a new question", c='c')  # Option to add a new question
 
 def greeting():
     for char in BANNER:

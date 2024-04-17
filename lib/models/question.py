@@ -61,12 +61,14 @@ class Question:
             sql="""
                     INSERT INTO questions (question, answers, correct_answer, difficulty) VALUES (?,?,?,?);
                 """
-            CURSOR.execute(sql,(self.question, db_answers,self.correct_answer, db_difficulty)).fetchone()
+            CURSOR.execute(sql,(self.question, db_answers, self.correct_answer, db_difficulty))
             self.id = CURSOR.lastrowid
             CONN.commit()
            
         except Exception as err:
             print(f'Save went wrong,{err}')
+            
+    
 
     @classmethod
     def create_row(cls,question,answer,correct_answer,difficulty):
@@ -93,7 +95,32 @@ class Question:
         CURSOR.execute(sql)
         CONN.commit()
     
-    
+    @staticmethod
+    def add_new_question():
+        print("Please entr the details for the new question: ")
+        question_text = input("Question: ")
+        
+        #prompt for answers
+        answers = []
+        for i in range(4):
+            answer = input(f"Enter answer {i+1}: ")
+            answers.append(answer)
+            
+        #prompt for correct answer
+        correct_answer = input("Enter the correct answer: ").strip()
+        if correct_answer not in answers: 
+            print("Invalid input. Correct answer must be one of the provided answers")
+            return #this line returns from the function if the correct answer is invalid
+        
+        #prompt for difficulty level
+        difficulty = input("Enter difficulty level (Easy, Medium, Hard): ").capitalize()
+        if difficulty not in ['Easy', 'Medium', 'Hard']:
+            print("Invalid input. Difficulty level must be 'Easy', 'Medium', or 'Hard'.")
+            return
+        
+        #create the new question object and save it to the database
+        new_question = Question(question_text, answers, correct_answer, {"difficulty": difficulty})
+        new_question.save()
     
     
     
