@@ -49,10 +49,15 @@ def game_over(game, cur_user, main_callback):
     print(f'You walked away with ${game.final_score}')
     print(f"Thanks for playing, {cur_user.name}")
     #TODO Add User class method to get/update user high score after each game is played
-    game.update()
-    new_high_score = Users.get_user_high_score(game.user_id)
-    if game.final_score > new_high_score:
+    old_high_score = Users.get_user_high_score(game.user_id)
+  
+    print(f"final score:{game.final_score}")
+    print(f"new high score:{old_high_score}")
+
+    if game.final_score > old_high_score:
         Users.update_high_score(game.user_id, game.final_score)
+    
+    game.update()
 
     """Prompt the player to either restart or quit the game"""
     while True:

@@ -155,5 +155,5 @@ class Users:
             SET high_score = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (user_id, new_high_score))
+        CURSOR.execute(sql, (new_high_score, user_id,))
         CONN.commit()

@@ -8,8 +8,4 @@ from models.game import Game
 
 import ipdb
 
-Question.create_table()
-
-question1 = Question("What is the chemical symbol for gold?", ["Au", "Ag", "Cu", "Fe"], "Au", {"difficulty": "Easy"})
-
 ipdb.set_trace()
