@@ -130,7 +130,6 @@ def play(cur_user, main_callback):
                 ask_the_audience_used = True
                 ANSWER_OPTIONS.remove('1') 
 
-                #TODO maybe add some actual math/logic here to render random amounts (majority for correct)
                 print(f"The results are in! 60% of the audience thinks the answer is: {question.correct_answer}")
                 print(f"{question.question}") #reprint question
                 for j, option in enumerate(options): #reprint options 
