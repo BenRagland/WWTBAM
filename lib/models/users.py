@@ -130,12 +130,13 @@ class Users:
     
         
     @classmethod
-    def get_user_high_score(cls, user_id):
+    def get_user_high_score(cls, id):
         sql = """
-            SELECT MAX(final_score) FROM games WHERE user_id = ?;
+            SELECT high_score FROM users WHERE id = ?;
         """
-        high_score = CURSOR.execute(sql, (user_id,)).fetchone()[0]
-        return high_score if high_score else 0
+        high_score = CURSOR.execute(sql, (id,)).fetchone()[0]
+        return high_score 
+    # if high_score else 0
         
     @classmethod    
     def get_all_high_scores(cls):
@@ -149,11 +150,11 @@ class Users:
         return high_scores
     
     @classmethod
-    def update_high_score(cls, user_id, new_high_score):
+    def update_high_score(cls, new_high_score, user_id):
         sql = """
             UPDATE users
             SET high_score = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (user_id, new_high_score))
+        CURSOR.execute(sql, (new_high_score, user_id))
         CONN.commit()
