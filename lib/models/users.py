@@ -16,8 +16,8 @@ class Users:
     #validate name 
     @name.setter
     def name(self,name):
-        if not (isinstance(name,str)):
-            raise TypeError("name must be a string")
+        if not (isinstance(name,str) and 16 > len(name) > 1):
+            raise Exception("name must be a string and between 2-15 characters")
         else:
             self._name = name.upper()
 
@@ -36,15 +36,23 @@ class Users:
         CURSOR.execute(sql)
         CONN.commit()
     
+    # Validates if there is a duplicate in the table or not
     def save(self):
         try:
-            sql= """
-                INSERT INTO Users (name,high_score) VALUES (?,?);
-                """
-            CURSOR.execute(sql,(self.name,self.high_score))
-            # set ID
-            self.id = CURSOR.lastrowid
-            CONN.commit()
+            select_sql = """
+                SELECT * From users WHERE name = ?
+            """
+            row = CURSOR.execute(select_sql,(self.name,)).fetchone()
+            if not row:
+                sql= """
+                    INSERT INTO Users (name,high_score) VALUES (?,?);
+                    """
+                CURSOR.execute(sql,(self.name,self.high_score))
+                # set ID
+                self.id = CURSOR.lastrowid
+                CONN.commit()
+            else:
+                print(f"user name: {self.name} already exists as id:{self.id}")
         except Exception as err:
             print(f'Save went wrong,{err}')
 
