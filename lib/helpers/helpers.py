@@ -38,7 +38,7 @@ def update_user():
 # Print and return user's high score
 def get_user_high_score(user_id):
     high_score = Users.get_user_high_score(user_id)
-    print(f"Your high score: {high_score}")
+    print(f"Your high score: ${high_score}")
     return high_score
 
 # Retrieve all high scores
@@ -50,7 +50,7 @@ def get_all_high_scores():
         for user_id, user_name, high_score in all_high_scores:
             user = Users.find_by_id(user_id)
             if user:
-                print(f"User: {user_name}, High Score: {high_score}")
+                print(f"User: {user_name}, High Score: ${high_score}")
             else:
                 print(f"No user found with ID: {user_id}")
     else:

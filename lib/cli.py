@@ -44,15 +44,15 @@ def main():
             cur_user = Users.find_or_create_by(username.upper())
             print(f"Welcome, {cur_user.name}!")
         elif choice == '2':
+            play(cur_user, main)
+        elif choice == '3':
             #prints all games 
             if Game.get_games_by_user(cur_user.id):
                 print(Game.get_games_by_user(cur_user.id)) 
             else:
                 print('You haven\'t played any games yet!')
-        elif choice == '3':
-            get_user_high_score(cur_user.id)
         elif choice == '4':
-            play(cur_user, main)
+            get_user_high_score(cur_user.id)
         elif choice == '5':
             get_all_high_scores()
         elif choice == '6':
