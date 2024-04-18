@@ -12,6 +12,7 @@ from models.users import Users
 from models.question import Question
 from models.game import Game
 from WWTBAM import *
+import os
 
 #constant variable    
 BANNER = """
@@ -28,7 +29,8 @@ WHO WANTS TO BE A...
 cur_user = None
 
 def main():
-    
+    os.system('clear')
+    greeting()
     Users.create_table()
     Game.create_table()
     
@@ -96,7 +98,6 @@ def greeting():
         time.sleep(0.005)
 
 if __name__ == "__main__":
-    greeting()
     main()
     
     
