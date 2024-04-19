@@ -55,7 +55,7 @@ jspm_packages
 .pytest_cache
 __pycache__
 
-
+*.env
 *.db
 */*.db
 migrations
